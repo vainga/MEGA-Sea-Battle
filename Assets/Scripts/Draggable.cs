@@ -27,6 +27,12 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        //Очистка занятых клеток
+        if (ship != null)
+        {
+            ship.ClearOccupiedCells();
+        }
+
         isDragging = true;
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
@@ -73,7 +79,6 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     {
         if (!isDragging)
         {
-            // Log the health of the ship
             if (ship != null)
             {
                 Debug.Log("Ship Health: " + ship.Health);
@@ -102,6 +107,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         foreach (var cell in gridManager.cellList)
         {
             CellManager cellManager = FindCellManager(cell);
+
             if (cellManager != null)
             {
                 float distanceX = Mathf.Abs(position.x - cellManager.transform.position.x);
@@ -191,6 +197,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             {
                 cellManager.ResetCellColor();
             }
+            
         }
 
         foreach (CellManager cell in FindObjectsOfType<CellManager>())
@@ -257,6 +264,8 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             float averageX = 0f;
             float averageY = 0f;
 
+            
+
             ship.ClearOccupiedCells();
 
             Cell[] newOccupiedCells = new Cell[ship.Health];
@@ -275,6 +284,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             Vector3 newPosition = new Vector3(averageX, averageY, rectTransform.position.z);
             rectTransform.position = newPosition;
 
+            //Добавить занятые клетки в объект grid
             ship.SetOccupiedCells(newOccupiedCells);
         }
         else

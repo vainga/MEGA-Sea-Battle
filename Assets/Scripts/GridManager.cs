@@ -8,6 +8,8 @@ public class GridManager : MonoBehaviour
     private const int gridHeight = 10;
     private const float cellSize = 1f;
 
+    public Grid grid;
+
     public float CellSize
     {
         get
@@ -20,6 +22,7 @@ public class GridManager : MonoBehaviour
 
     void Start()
     {
+        grid = new Grid();
         GenerateGrid();
     }
 
@@ -46,15 +49,36 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void DeleteOldCells()
+    {
+        foreach (var cell in cellList)
+        {
+            if (cell.IsEmpty)
+            {
+                grid.OccupiedCells.Remove(cell);
+            }
+        }
+    }
+
+    //Дабавляет заново для всех кораблей при вызове, надо исправить 
     public void PrintOccupiedCells()
     {
+
         foreach (var cell in cellList)
         {
             if (!cell.IsEmpty)
             {
                 Debug.Log($"Cell occupied at: {cell.PosX}, {cell.PosY}");
+
+                if(!grid.OccupiedCells.Contains(cell))
+                {
+                    DeleteOldCells();
+                    grid.AddOccupiedCells(cell);
+                }
+                Debug.Log(grid.OccupiedCells.Count);
             }
         }
     }
+
 
 }

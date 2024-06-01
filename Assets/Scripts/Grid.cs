@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 
 public class Grid
 {
     private List<Cell> _occupiedCells;
 
-    public List<Cell> occupiedCells
+    public List<Cell> OccupiedCells
     {
         get { return _occupiedCells; }
     }
@@ -19,6 +20,8 @@ public class Grid
     {
         _occupiedCells = new List<Cell>();
     }
+
+
 
     public void AddOccupiedCells(Cell cell)
     {
