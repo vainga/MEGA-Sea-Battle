@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Cell
+  - Ship1
+  - Ship2
+  - Ship3
+  - Ship4
+  - Grid
+  - Draggable
   layers:
   - Default
   - TransparentFX
