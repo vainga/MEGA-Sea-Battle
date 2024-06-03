@@ -30,13 +30,19 @@ public class GameManager : MonoBehaviour
 
     public void SetPlayerOccupiedCells(int player, List<Cell> occupiedCells)
     {
+        List<Cell> copiedCells = new List<Cell>();
+        foreach (Cell cell in occupiedCells)
+        {
+            copiedCells.Add(new Cell(cell.PosX, cell.PosY) { IsEmpty = cell.IsEmpty });
+        }
+
         if (player == 1)
         {
-            Player1OccupiedCells = occupiedCells;
+            Player1OccupiedCells = copiedCells;
         }
         else if (player == 2)
         {
-            Player2OccupiedCells = occupiedCells;
+            Player2OccupiedCells = copiedCells;
         }
     }
 }

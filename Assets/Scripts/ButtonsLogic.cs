@@ -61,7 +61,7 @@ public class ButtonsLogic : MonoBehaviour
                 errorText.gameObject.SetActive(true);
                 return;
             }
-            GameManager.Instance.SetPlayerOccupiedCells(1, player1OccupiedCells);
+            GameManager.Instance.SetPlayerOccupiedCells(1, new List<Cell>(player1OccupiedCells));
 
             foreach (Cell cell in player1OccupiedCells)
             {
@@ -81,7 +81,7 @@ public class ButtonsLogic : MonoBehaviour
                 errorText.gameObject.SetActive(true);
                 return;
             }
-            GameManager.Instance.SetPlayerOccupiedCells(2, player2OccupiedCells);
+            GameManager.Instance.SetPlayerOccupiedCells(2, new List<Cell>(player2OccupiedCells));
 
             foreach (Cell cell in player2OccupiedCells)
             {
@@ -91,6 +91,7 @@ public class ButtonsLogic : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
+
 
     private List<Cell> GetPlayer1OccupiedCells(GridManager gridManager)
     {

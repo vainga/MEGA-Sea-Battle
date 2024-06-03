@@ -40,11 +40,21 @@ public class GridManager : MonoBehaviour
             {
                 Vector3 cellPos = startPos + new Vector3(x * cellSize, -y * cellSize, -0.1f);
                 Cell cell = new Cell(x, y);
+
+                // Проверка, есть ли эта ячейка в grid.OccupiedCells
+                Cell existingCell = grid.OccupiedCells.Find(c => c.PosX == x && c.PosY == y);
+                if (existingCell != null)
+                {
+                    cell.IsEmpty = existingCell.IsEmpty;
+                }
+
                 cellList.Add(cell);
 
                 GameObject newCell = Instantiate(cellPrefab, cellPos, Quaternion.identity, transform);
                 CellManager cellManager = newCell.GetComponent<CellManager>();
                 cellManager.cell = cell;
+
+                cellManager.ResetCellColor();
             }
         }
     }
@@ -65,6 +75,29 @@ public class GridManager : MonoBehaviour
 
         Debug.Log("Grid cleared for next player.");
     }
+
+    public void FillOccupiedCells(List<Cell> cells)
+    {
+        grid.OccupiedCells.Clear(); // Очищаем список перед заполнением
+
+        foreach (var cell in cells)
+        {
+            // Создаем новую клетку с тем же состоянием, что и клетка из player1OccupiedCells или player2OccupiedCells
+            Cell newCell = new Cell(cell.PosX, cell.PosY);
+            newCell.IsEmpty = cell.IsEmpty;
+
+            // Добавляем новую клетку в список OccupiedCells
+            grid.OccupiedCells.Add(newCell);
+
+            // Обновляем статус IsEmpty в cellList
+            Cell gridCell = cellList.Find(c => c.PosX == cell.PosX && c.PosY == cell.PosY);
+            if (gridCell != null)
+            {
+                gridCell.IsEmpty = cell.IsEmpty;
+            }
+        }
+    }
+
 
     public void DeleteOldCells()
     {

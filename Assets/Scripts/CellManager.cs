@@ -30,12 +30,12 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        LogCellCoordinates();
+        LogCellStatus();
     }
 
-    private void LogCellCoordinates()
+    private void LogCellStatus()
     {
-        Debug.Log($"Cell coordinates: {cell.PosX}, {cell.PosY}");
+        Debug.Log($"Cell coordinates: {cell.PosX}, {cell.PosY}, isEmpty: {cell.IsEmpty}");
     }
 
     public void HighlightCell()

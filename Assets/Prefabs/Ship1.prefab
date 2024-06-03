@@ -29,7 +29,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2006589404638979163}
   m_LocalRotation: {x: -0, y: -0, z: 0.70710623, w: 0.7071074}
-  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 2.5294163, y: 2.5294163, z: 2.6443765}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -105,6 +105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e76c2652f948f47952ccf04172f186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rectTransform: {fileID: 0}
+  initialPosition: {x: 0, y: 0, z: 0}
+  isRotated: 0
 --- !u!222 &9113615967661154730
 CanvasRenderer:
   m_ObjectHideFlags: 0
