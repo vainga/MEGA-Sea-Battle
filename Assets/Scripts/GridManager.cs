@@ -49,6 +49,23 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public void ClearGrid()
+    {
+        foreach (var cell in cellList)
+        {
+            cell.IsEmpty = true;
+        }
+
+        grid.OccupiedCells.Clear();
+
+        foreach (var cellManager in FindObjectsOfType<CellManager>())
+        {
+            cellManager.ResetCellColor();
+        }
+
+        Debug.Log("Grid cleared for next player.");
+    }
+
     public void DeleteOldCells()
     {
         foreach (var cell in cellList)
@@ -60,17 +77,15 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    //Дабавляет заново для всех кораблей при вызове, надо исправить 
     public void PrintOccupiedCells()
     {
-
         foreach (var cell in cellList)
         {
             if (!cell.IsEmpty)
             {
                 Debug.Log($"Cell occupied at: {cell.PosX}, {cell.PosY}");
 
-                if(!grid.OccupiedCells.Contains(cell))
+                if (!grid.OccupiedCells.Contains(cell))
                 {
                     DeleteOldCells();
                     grid.AddOccupiedCells(cell);
@@ -79,6 +94,4 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
-
 }

@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SetShipLocation.unity
     guid: 02f1ad174aabd7842809be01d71e0fc7
+  - enabled: 1
+    path: Assets/BattleScene.unity
+    guid: 5120f880048d8a141b3d3d588d6a14f0
   m_configObjects: {}

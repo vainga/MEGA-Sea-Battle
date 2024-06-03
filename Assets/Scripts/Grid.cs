@@ -49,6 +49,11 @@ public class Grid
         return true;
     }
 
+    public void RemoveOccupiedCell(Cell cell)
+    {
+        _occupiedCells.Remove(cell);
+    }
+
     public bool RotateShip(Ships ship)
     {
         var occupiedCells = ship.GetOccupiedCells();

@@ -4,13 +4,17 @@ using System.Collections.Generic;
 
 public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerUpHandler
 {
-    private RectTransform rectTransform;
-    private Vector3 initialPosition;
+    public RectTransform rectTransform;
+    public Vector3 initialPosition;
     private Vector3 offset;
     private bool isDragging = false;
 
     private GridManager gridManager;
     private bool isInsideGrid = false;
+    public bool isRotated = false; // To track rotation state
+
+    private float clickTime = 0f; // To track the time of the pointer down
+    private bool isClick = false; // To track if it's a click
 
     public Ships ship;
 
@@ -27,13 +31,14 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //Очистка занятых клеток
+        isDragging = true;
+        isClick = false; // Not a click since dragging
+
         if (ship != null)
         {
             ship.ClearOccupiedCells();
         }
 
-        isDragging = true;
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0;
         offset = rectTransform.position - mousePosition;
@@ -63,12 +68,18 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         isDragging = false;
         ResetCellsColor();
 
-        if (isInsideGrid)
+        if (isInsideGrid && CanPlaceShipOnCells())
         {
             PositionInMiddle();
         }
         else
         {
+            if (ship != null)
+            {
+                ship.ClearOccupiedCells();
+                gridManager.DeleteOldCells();
+            }
+
             rectTransform.position = initialPosition;
         }
 
@@ -77,17 +88,36 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!isDragging)
+        if (!isDragging && ship != null)
         {
-            if (ship != null)
-            {
-                Debug.Log("Ship Health: " + ship.Health);
-            }
+            Debug.Log("Ship Health: " + ship.Health);
         }
+
+        clickTime = Time.time; // Record the time of the pointer down
+        isClick = true; // Assume it is a click until proven otherwise
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
+        if (isClick && !isDragging && !isInsideGrid)
+        {
+            // Check if the time between pointer down and up is short enough to be considered a click
+            if (Time.time - clickTime < 0.3f)
+            {
+                if (!isRotated)
+                {
+                    // Rotate 90 degrees
+                    rectTransform.Rotate(0, 0, 90);
+                    isRotated = true;
+                }
+                else
+                {
+                    // Rotate back to original
+                    rectTransform.Rotate(0, 0, -90);
+                    isRotated = false;
+                }
+            }
+        }
     }
 
     private bool IsInsideGrid(Vector3 position)
@@ -160,13 +190,13 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             Vector3 start = worldCorners[i];
             Vector3 end = worldCorners[(i + 1) % 4];
             raycastPoints.Add(start);
-            raycastPoints.Add(Vector3.Lerp(start, end, 1f / 8f)); 
-            raycastPoints.Add(Vector3.Lerp(start, end, 2f / 8f)); 
-            raycastPoints.Add(Vector3.Lerp(start, end, 3f / 8f)); 
-            raycastPoints.Add(Vector3.Lerp(start, end, 4f / 8f)); 
-            raycastPoints.Add(Vector3.Lerp(start, end, 5f / 8f)); 
-            raycastPoints.Add(Vector3.Lerp(start, end, 6f / 8f)); 
-            raycastPoints.Add(Vector3.Lerp(start, end, 7f / 8f)); 
+            raycastPoints.Add(Vector3.Lerp(start, end, 1f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 2f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 3f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 4f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 5f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 6f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 7f / 8f));
             raycastPoints.Add(end);
         }
 
@@ -190,14 +220,20 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
         {
             if (count < ship.Health)
             {
-                cellManager.HighlightCell();
+                if (gridManager.grid.CanPlaceShip(cellManager.cell))
+                {
+                    cellManager.HighlightCell();
+                }
+                else
+                {
+                    cellManager.HighlightCellRed();
+                }
                 count++;
             }
             else
             {
                 cellManager.ResetCellColor();
             }
-            
         }
 
         foreach (CellManager cell in FindObjectsOfType<CellManager>())
@@ -264,8 +300,6 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             float averageX = 0f;
             float averageY = 0f;
 
-            
-
             ship.ClearOccupiedCells();
 
             Cell[] newOccupiedCells = new Cell[ship.Health];
@@ -284,12 +318,64 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             Vector3 newPosition = new Vector3(averageX, averageY, rectTransform.position.z);
             rectTransform.position = newPosition;
 
-            //Добавить занятые клетки в объект grid
             ship.SetOccupiedCells(newOccupiedCells);
         }
         else
         {
             rectTransform.position = initialPosition;
         }
+    }
+
+    private bool CanPlaceShipOnCells()
+    {
+        Vector3[] worldCorners = new Vector3[4];
+        rectTransform.GetWorldCorners(worldCorners);
+
+        List<Vector3> raycastPoints = new List<Vector3>();
+
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 start = worldCorners[i];
+            Vector3 end = worldCorners[(i + 1) % 4];
+            raycastPoints.Add(start);
+            raycastPoints.Add(Vector3.Lerp(start, end, 1f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 2f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 3f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 4f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 5f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 6f / 8f));
+            raycastPoints.Add(Vector3.Lerp(start, end, 7f / 8f));
+            raycastPoints.Add(end);
+        }
+
+        List<CellManager> highlightedCells = new List<CellManager>();
+
+        foreach (Vector3 point in raycastPoints)
+        {
+            RaycastHit2D[] hits = Physics2D.RaycastAll(point, Vector2.zero);
+            foreach (var hit in hits)
+            {
+                CellManager cellManager = hit.collider?.GetComponent<CellManager>();
+                if (cellManager != null && !highlightedCells.Contains(cellManager))
+                {
+                    highlightedCells.Add(cellManager);
+                }
+            }
+        }
+
+        int count = 0;
+        foreach (CellManager cellManager in highlightedCells)
+        {
+            if (count < ship.Health)
+            {
+                if (!gridManager.grid.CanPlaceShip(cellManager.cell))
+                {
+                    return false;
+                }
+                count++;
+            }
+        }
+
+        return true;
     }
 }

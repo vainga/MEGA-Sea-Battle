@@ -44,5 +44,11 @@ public class Ships
                 }
             }
         }
+
+        for (int i = 0; i < _occupiedCells.Length; i++)
+        {
+            _occupiedCells[i] = null;
+        }
     }
+
 }
