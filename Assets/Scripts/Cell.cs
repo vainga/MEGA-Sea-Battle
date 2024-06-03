@@ -9,6 +9,7 @@ public class Cell
     private int _posX;
     private int _posY;
     private bool _isEmpty = true;
+    public bool _isClickable = true;
 
     public int PosX
     {

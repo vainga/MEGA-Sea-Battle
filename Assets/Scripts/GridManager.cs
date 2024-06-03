@@ -38,7 +38,7 @@ public class GridManager : MonoBehaviour
         {
             for (int x = 0; x < gridWidth; x++)
             {
-                Vector3 cellPos = startPos + new Vector3(x * cellSize, -y * cellSize, 0f);
+                Vector3 cellPos = startPos + new Vector3(x * cellSize, -y * cellSize, -0.1f);
                 Cell cell = new Cell(x, y);
                 cellList.Add(cell);
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
+public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private SpriteRenderer spriteRenderer;
     private Color normalColor;
@@ -16,19 +16,26 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
         normalColor = spriteRenderer.color;
     }
 
-    public void OnDrop(PointerEventData eventData)
-    {
-
-    }
+    public void OnDrop(PointerEventData eventData) { }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-
+        //HighlightCell();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        //ResetCellColor();
+    }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        LogCellCoordinates();
+    }
+
+    private void LogCellCoordinates()
+    {
+        Debug.Log($"Cell coordinates: {cell.PosX}, {cell.PosY}");
     }
 
     public void HighlightCell()
@@ -38,7 +45,7 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
 
     public void HighlightCellRed()
     {
-        spriteRenderer.color = highlightedRedColor; 
+        spriteRenderer.color = highlightedRedColor;
     }
 
     public void ResetCellColor()
