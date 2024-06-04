@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ButtonsLogic : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class ButtonsLogic : MonoBehaviour
 
     public TextMeshProUGUI errorText;
     //private bool isError = false;
+
+    public Player player1;
+    public Player player2;
 
     public void PlayGame()
     {
@@ -37,6 +41,7 @@ public class ButtonsLogic : MonoBehaviour
             if (isPlayer1Turn)
             {
                 infoText.text = "Player 1";
+
             }
             else
             {
@@ -55,6 +60,8 @@ public class ButtonsLogic : MonoBehaviour
 
         if (isPlayer1Turn)
         {
+            player1 = new Player(infoText.text);
+            GameManager.Instance.player1 = player1;
             List<Cell> player1OccupiedCells = GetPlayer1OccupiedCells(gridManager);
             if (player1OccupiedCells.Count < 20)
             {
@@ -75,6 +82,8 @@ public class ButtonsLogic : MonoBehaviour
         }
         else
         {
+            player2 = new Player(infoText.text);
+            GameManager.Instance.player2 = player2;
             List<Cell> player2OccupiedCells = GetPlayer2OccupiedCells(gridManager);
             if (player2OccupiedCells.Count < 20)
             {

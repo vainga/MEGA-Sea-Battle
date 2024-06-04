@@ -10,8 +10,12 @@ public class GameManager : MonoBehaviour
         get { return _instance; }
     }
 
+    public Player player1;
+    public Player player2;
+
     public List<Cell> Player1OccupiedCells { get; private set; }
     public List<Cell> Player2OccupiedCells { get; private set; }
+
 
     private void Awake()
     {
