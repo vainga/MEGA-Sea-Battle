@@ -9,6 +9,7 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
     private Color highlightedRedColor = new Color(1f, 0f, 0f, 0.6f);
 
     public Cell cell;
+    private BattleManager battleManager;
 
     private void Awake()
     {
@@ -16,26 +17,38 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
         normalColor = spriteRenderer.color;
     }
 
+    private void Start()
+    {
+        // Find the BattleManager instance in the scene
+        battleManager = FindObjectOfType<BattleManager>();
+        if (battleManager == null)
+        {
+            Debug.LogError("BattleManager not found in the scene.");
+        }
+    }
+
     public void OnDrop(PointerEventData eventData) { }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //HighlightCell();
+        // HighlightCell();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //ResetCellColor();
+        // ResetCellColor();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        LogCellStatus();
-    }
-
-    private void LogCellStatus()
-    {
-        Debug.Log($"Cell coordinates: {cell.PosX}, {cell.PosY}, isEmpty: {cell.IsEmpty}");
+        if (battleManager != null)
+        {
+            battleManager.LogCellStatus(this);
+        }
+        else
+        {
+            Debug.LogError("BattleManager is not assigned.");
+        }
     }
 
     public void HighlightCell()
@@ -51,5 +64,11 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
     public void ResetCellColor()
     {
         spriteRenderer.color = normalColor;
+    }
+
+    public void ActivateTochka()
+    {
+        GameObject tochkaObject = transform.Find("TOCHKA").gameObject;
+        tochkaObject.SetActive(true);
     }
 }

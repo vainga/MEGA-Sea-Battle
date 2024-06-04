@@ -11,10 +11,10 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
 
     private GridManager gridManager;
     private bool isInsideGrid = false;
-    public bool isRotated = false; // To track rotation state
+    public bool isRotated = false;
 
-    private float clickTime = 0f; // To track the time of the pointer down
-    private bool isClick = false; // To track if it's a click
+    private float clickTime = 0f; 
+    private bool isClick = false;
 
     public Ships ship;
 
@@ -32,7 +32,7 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
     public void OnBeginDrag(PointerEventData eventData)
     {
         isDragging = true;
-        isClick = false; // Not a click since dragging
+        isClick = false;
 
         if (ship != null)
         {
@@ -93,26 +93,23 @@ public class Draggable : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, 
             Debug.Log("Ship Health: " + ship.Health);
         }
 
-        clickTime = Time.time; // Record the time of the pointer down
-        isClick = true; // Assume it is a click until proven otherwise
+        clickTime = Time.time;
+        isClick = true; 
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         if (isClick && !isDragging && !isInsideGrid)
         {
-            // Check if the time between pointer down and up is short enough to be considered a click
             if (Time.time - clickTime < 0.3f)
             {
                 if (!isRotated)
                 {
-                    // Rotate 90 degrees
                     rectTransform.Rotate(0, 0, 90);
                     isRotated = true;
                 }
                 else
                 {
-                    // Rotate back to original
                     rectTransform.Rotate(0, 0, -90);
                     isRotated = false;
                 }

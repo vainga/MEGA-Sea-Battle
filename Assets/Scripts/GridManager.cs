@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
@@ -59,6 +59,29 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public bool HasAdjacentOccupiedCell(Cell cell)
+    {
+        int[] dx = { -1, 0, 1, -1, 1, -1, 0, 1 };
+        int[] dy = { -1, -1, -1, 0, 0, 1, 1, 1 };
+
+        for (int i = 0; i < dx.Length; i++)
+        {
+            int newX = cell.PosX + dx[i];
+            int newY = cell.PosY + dy[i];
+
+            if (newX >= 0 && newX < gridWidth && newY >= 0 && newY < gridHeight)
+            {
+                Cell adjacentCell = cellList.Find(c => c.PosX == newX && c.PosY == newY);
+                if (adjacentCell != null && !adjacentCell.IsEmpty)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public void ClearGrid()
     {
         foreach (var cell in cellList)
@@ -97,7 +120,6 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
 
     public void DeleteOldCells()
     {

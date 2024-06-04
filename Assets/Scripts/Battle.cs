@@ -9,12 +9,6 @@ public class Battle
 
     public bool Attack(Cell cell)
     {
-        if (!cell._isClickable)
-        {
-            return false;
-        }
-
-        cell._isClickable = false;
 
         if (!cell.IsEmpty)
         {

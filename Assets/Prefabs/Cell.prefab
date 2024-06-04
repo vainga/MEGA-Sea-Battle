@@ -313,7 +313,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537c0f98fdfa2744e896ff8fe6ac1d8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleManager: {fileID: 7873331715944371137, guid: 0a3a81fda7d975c45a5894e85aa830ea, type: 3}
+  battleManager: {fileID: 3608840158354302224, guid: fe0a09fa125c7074ab7cb17e4fd72009, type: 3}
 --- !u!61 &9058372221504393271
 BoxCollider2D:
   m_ObjectHideFlags: 0
