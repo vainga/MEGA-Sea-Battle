@@ -19,8 +19,6 @@ MonoBehaviour:
     rid: 7778599575066247189
   m_Scenes:
   - m_enabled: 1
-    m_path: Assets/MainMenu.unity
-  - m_enabled: 1
     m_path: Assets/SetShipLocation.unity
   - m_enabled: 1
     m_path: Assets/BattleScene.unity

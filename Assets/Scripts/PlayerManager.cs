@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
         player = new Player("PlayerName");
 
         Debug.Log("Player name: " + player._playerName);
+
     }
 }
 

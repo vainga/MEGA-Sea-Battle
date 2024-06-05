@@ -1,7 +1,7 @@
 using Mirror;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ClientManager : MonoBehaviour
 {
@@ -37,6 +37,7 @@ public class ClientManager : MonoBehaviour
         networkManager.StartClient();
 
         NetworkClient.RegisterHandler<ReadyMessage>(OnReadyMessageReceived);
+        NetworkClient.RegisterHandler<SceneMessage>(OnSceneMessageReceived);
     }
 
     public void OnClientReady()
@@ -53,5 +54,16 @@ public class ClientManager : MonoBehaviour
         Debug.Log("Ready message received from server.");
     }
 
+    private void OnSceneMessageReceived(SceneMessage msg)
+    {
+        Debug.Log("Scene message received: " + msg.sceneName);
+        SceneManager.LoadScene(msg.sceneName);
+    }
+
     public struct ReadyMessage : NetworkMessage { }
+
+    public struct SceneMessage : NetworkMessage
+    {
+        public string sceneName;
+    }
 }

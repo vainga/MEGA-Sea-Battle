@@ -1,5 +1,6 @@
 using Mirror;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HostManager : NetworkManager
 {
@@ -49,6 +50,9 @@ public class HostManager : NetworkManager
             {
                 playerController.RpcLoadNextScene();
             }
+
+            string nextSceneName = "SetShipLocation";
+            NetworkServer.SendToAll(new ClientManager.SceneMessage { sceneName = nextSceneName });
         }
     }
 }
