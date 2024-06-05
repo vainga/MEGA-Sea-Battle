@@ -52,6 +52,14 @@ public class CellManager : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
     {
         if (isInteractive && battleManager != null && !isClicked)
         {
+            // Проверяем, активен ли текущий игрок для клика
+            if ((battleManager.isPlayer1Turn && transform.parent == battleManager.gridManager2.transform) ||
+                (!battleManager.isPlayer1Turn && transform.parent == battleManager.gridManager1.transform))
+            {
+                Debug.Log("Этот игрок не может кликать по этой сетке в данный момент.");
+                return;
+            }
+
             isClicked = true;
             battleManager.LogCellStatus(this);
         }

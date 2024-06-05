@@ -11,7 +11,7 @@ public class BattleManager : MonoBehaviour
     public GameObject darkOverlay;
     public TextMeshProUGUI menuText;
 
-    private bool isPlayer1Turn = false;
+    public bool isPlayer1Turn = false;
     private int player1KilledCells = 0;
     private int player2KilledCells = 0;
     private const int cellsToWin = 20;
@@ -34,6 +34,13 @@ public class BattleManager : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "BattleScene")
         {
+            if ((isPlayer1Turn && cellManager.transform.parent == gridManager2.transform) ||
+            (!isPlayer1Turn && cellManager.transform.parent == gridManager1.transform))
+            {
+                Debug.Log("Этот игрок не может кликать по этой сетке в данный момент.");
+                return;
+            }
+
             Debug.Log($"Cell coordinates: {cellManager.cell.PosX}, {cellManager.cell.PosY}, isEmpty: {cellManager.cell.IsEmpty}");
 
             GameObject krestObject = cellManager.transform.Find("KREST").gameObject;
