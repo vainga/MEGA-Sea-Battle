@@ -7,6 +7,20 @@ public class ClientManager : MonoBehaviour
 {
     public TMP_InputField ipInputField;
     private NetworkManager networkManager;
+    private static ClientManager instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {

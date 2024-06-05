@@ -27,6 +27,10 @@ public class Cell
         set { _isEmpty = value; }
     }
 
+    public Cell()
+    {
+    }
+
     public Cell(int x, int y)
     {
         _posX = x;
