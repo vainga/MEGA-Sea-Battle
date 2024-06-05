@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ButtonsLogic : MonoBehaviour
 {
@@ -142,5 +141,10 @@ public class ButtonsLogic : MonoBehaviour
             }
             draggable.isRotated = false;
         }
+    }
+
+    public void BackButton()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - SceneManager.GetActiveScene().buildIndex);
     }
 }
